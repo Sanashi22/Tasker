@@ -1,0 +1,19 @@
+{%extends 'base.html'%}
+
+{% load django_bootstrap5 %}
+{%block content%}
+<h2 class="d-flex align-items-center justify-content-center" >
+    Add New Task
+    </h2>
+    <hr>
+   <div class="d-flex align-items-center justify-content-center">
+<form method="post" action="{% url 'task:add_task'%}">
+    {%csrf_token%} 
+    
+    {%bootstrap_form form %}
+    <button class="btn btn-primary">
+        Add New Task
+    </button>
+</form>
+</div>
+{%endblock%}

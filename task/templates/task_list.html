@@ -1,0 +1,73 @@
+{%extends 'base.html'%}
+{%block content%}
+<h2>
+  My TaskList
+  </h2>
+  <a href="{%url 'task:add_task' %}" class="btn btn-primary" role="button" aria-disabled="true">Add New Task</a>
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Title</th>
+        <th scope="col">Completed</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+        {%for task in tasks%}
+      <tr>
+       
+        <td>{{task.title}}</td>
+        <td>{{task.completed}}</td>
+        {%if not task.completed %}
+        <td>
+          <form action="{%url 'task:update_task' task.id %}" id="update-form">
+            {%csrf_token%}
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+            <label class="form-check-label" for="flexCheckDefault">
+              Mark as Complete
+            </label>
+          </div>
+          </form>
+        </td>
+        {%else %}
+        <td>
+        
+        </td>
+        {%endif%}
+        <td>
+          <a href="{%url 'task:delete_task' task.id %}" class="btn btn-danger" role="button" aria-disabled="true">Delete</a>
+           </td>
+        
+      </tr>
+      {%endfor%}
+      
+    </tbody>
+  </table>
+  <script>
+    $(document).ready(function () {
+        $('#flexCheckDefault').change(function () {
+            if (this.checked) {
+                
+ 
+                // Checkbox is checked, send an AJAX request
+                $.ajax({
+                    url: $('#update-form').attr('action'),
+                    type: 'GET',
+                    success: function (response) {
+                        window.location.href = "tasks"
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            } else {
+                // Checkbox is unchecked, clear the response container
+                $('#ajax-response').empty();
+            }
+        });
+    });
+    </script>
+{%endblock%}
